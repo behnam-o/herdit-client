@@ -1,5 +1,4 @@
-import { useMutation } from '@apollo/client';
-import { gql } from 'apollo-server-core';
+import { useMutation, gql } from '@apollo/client';
 import { Button, Form } from 'semantic-ui-react';
 import { useForm } from '../utils/hooks';
 import { FETCH_POSTS_QUERY } from '../utils/graphql';
@@ -27,22 +26,34 @@ function PostForm() {
    function createPostCallback() {
       createPost();
    }
-
+   if (error) {
+      console.log(error);
+   }
    return (
-      <Form onSubmit={onSubmit}>
-         <h2> Create a post:</h2>
-         <Form.Field>
-            <Form.Input
-               placeholder="Hi, World!"
-               name="title"
-               onChange={onChange}
-               value={values.title}
-            />
-            <Button type="submit" color="teal">
-               Submit
-            </Button>
-         </Form.Field>
-      </Form>
+      <>
+         <Form onSubmit={onSubmit}>
+            <h2> Create a post:</h2>
+            <Form.Field>
+               <Form.Input
+                  placeholder="Hi, World!"
+                  name="title"
+                  onChange={onChange}
+                  value={values.title}
+                  error={error ? true : false}
+               />
+               <Button type="submit" color="teal">
+                  Submit
+               </Button>
+            </Form.Field>
+         </Form>
+         {error && (
+            <div className="ui error message">
+               <ul className="list">
+                  <li>{error.graphQLErrors[0].message}</li>
+               </ul>
+            </div>
+         )}
+      </>
    );
 }
 
